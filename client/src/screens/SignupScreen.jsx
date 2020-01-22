@@ -12,8 +12,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 class SignupScreen extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       firstName: "",
       lastName: "",

@@ -15,7 +15,12 @@ const db = require("../db/tables/products.js");
 router.get("/userIdProximity", (req, res) => {
   const { userId, distance } = req.query;
   db.getProductsByProximityByUserId(userId, distance)
-    .then(data => res.status(200).send(data))
+    .then(result => {
+      return db.addPhotosToProductRows(result.rows);
+    })
+    .then(result => {
+      res.status(200).send(result);
+    })
     .catch(error => res.status(404).send(error));
 });
 
@@ -66,11 +71,11 @@ router.get("/productId", (req, res) => {
   db.getProductById(productId)
     .then(data => {
       response.rows = data.rows;
-      return db.getProductPhotosByProductId(productId);
+      return db.addPhotosToProductRows(data.rows);
     })
     .then(data => {
       response.images = data.rows;
-      res.status(200).send(response);
+      res.status(200).send(data);
     })
     .catch(error => {
       console.log(error);
